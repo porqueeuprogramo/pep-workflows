@@ -13,7 +13,7 @@ on:
 jobs:
   Tests:
     name: Run unit tests
-    uses: porqueeuprogramo/pep-workflows/.github/workflows/maven_test.yml@master
+    uses: porqueeuprogramo/pep-workflows/.github/workflows/maven_test.yml@main
     secrets: inherit
     with:
       settings_xml: ${{inputs.settings_xml}}
@@ -21,7 +21,7 @@ jobs:
   Package:
     name: Package JARs
     needs: Tests
-    uses: porqueeuprogramo/pep-workflows/.github/workflows/maven_package.yml@master
+    uses: porqueeuprogramo/pep-workflows/.github/workflows/maven_package.yml@main
     secrets: inherit
     with:
       settings_xml: ${{inputs.settings_xml}}
@@ -29,7 +29,7 @@ jobs:
   PreDeployCheck:
     name: Pre-deploy check
     needs: [ Package ]
-    uses: porqueeuprogramo/pep-workflows/.github/workflows/maven_pre_deploy_check.yml@master
+    uses: porqueeuprogramo/pep-workflows/.github/workflows/maven_pre_deploy_check.yml@main
     secrets: inherit
     with:
       settings_xml: ${{inputs.settings_xml}}
@@ -38,7 +38,7 @@ jobs:
     name: Push Image to ECR
     if: ${{ (inputs.to_promote) && (inputs.ecr_repo != '') }}
     needs: PreDeployCheck
-    uses: porqueeuprogramo/pep-workflows/.github/workflows/aws_ecr_push.yml@master
+    uses: porqueeuprogramo/pep-workflows/.github/workflows/aws_ecr_push.yml@main
     secrets: inherit
     with:
       settings_xml: ${{inputs.settings_xml}}
