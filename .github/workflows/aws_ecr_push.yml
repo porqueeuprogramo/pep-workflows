@@ -1,0 +1,58 @@
+name: Push to AWS ECR
+
+on:
+
+  workflow_call:
+    inputs:
+      settings_xml:
+        required: true
+        type: string
+      ecr_repo:
+        required: true
+        type: string  
+      aws_region:
+        required: true
+        type: string              
+
+jobs:
+  PushToEcr:
+    runs-on: cawe-linux-x64-general-medium
+    env:
+      SETTINGS_XML: ${{inputs.settings_xml}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 8
+          distribution: zulu
+          cache: 'maven'
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@v4.5
+        with:
+          maven-version: 3.6.0
+      - name: Cache local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ inputs.aws_region }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Push to ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ inputs.ecr_repo }}
+          IMAGE_TAG: latest
+        run: |
+          echo " $SETTINGS_XML " > settings.xml
+          mvn --settings settings.xml install -Pprod -Djib.httpTimeout=1800000 -Dcheckstyle.skip=true -DskipTests -Decr-service-repository=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG

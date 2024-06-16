@@ -1,0 +1,61 @@
+name: Package
+
+on:
+
+  workflow_call:
+    inputs:
+      settings_xml:
+        required: true
+        type: string
+
+jobs:
+  Package:
+    runs-on: cawe-linux-x64-general-medium
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      # Set up JDK
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 8
+          distribution: zulu
+          cache: maven
+
+      # Set up Maven
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@v4.5
+        with:
+          maven-version: 3.6.0
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-     
+
+      - name: Download compiled classes
+        uses: actions/download-artifact@v3
+        with:
+          name: target
+          path: target
+
+      - name: Package
+        env:
+          SETTINGS_XML: ${{ inputs.SETTINGS_XML }}
+        run: |
+          echo " $SETTINGS_XML " > settings.xml
+          mvn --settings settings.xml package -DskipTests
+
+      - name: Archive packaged artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: jars
+          path: |
+            target/*.jar        
+          
