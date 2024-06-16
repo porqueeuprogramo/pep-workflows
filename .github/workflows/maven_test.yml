@@ -46,14 +46,13 @@ jobs:
         run: |
           echo " $SETTINGS_XML " > settings.xml
           mvn --settings settings.xml test
-      - name: Report
-        uses: dorny/test-reporter@v1
-        if: always()
+      # Upload Test Results as Artifacts
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
         with:
-          name: Maven JUnit test report
+          name: Maven-JUnit-test-results
           path: target/surefire-reports/*.xml
-          reporter: java-junit
-          fail-on-error: true
+
       - name: Archive Report
         uses: actions/upload-artifact@v3
         with:
