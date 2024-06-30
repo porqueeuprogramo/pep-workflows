@@ -50,9 +50,16 @@ jobs:
           name: target
           path: target
 
+      # Prepare Integration Tests (H2 DB)
+      - name: Create H2 database directory
+        run: mkdir -p $HOME/h2
+
+      - name: Set environment variable for H2 database path
+        run: echo "H2_DATABASE=$HOME" >> $GITHUB_ENV
+
       - name: Package
         env:
-          SETTINGS_XML: ${{ inputs.SETTINGS_XML }}
+          H2_DATABASE: ${{ env.H2_DATABASE }}
         run: |
           mvn package -DskipTests
 
