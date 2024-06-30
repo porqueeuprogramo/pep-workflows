@@ -51,7 +51,9 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-
+      - name: Run tests
+        run: |
+          mvn test
       # Upload Test Results as Artifacts
       - name: Upload Test Results
         uses: actions/upload-artifact@v2

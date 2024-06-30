@@ -54,8 +54,7 @@ jobs:
         env:
           SETTINGS_XML: ${{ inputs.SETTINGS_XML }}
         run: |
-          echo " $SETTINGS_XML " > settings.xml
-          mvn --settings settings.xml package -DskipTests
+          mvn package -DskipTests
 
       - name: Archive packaged artifacts
         uses: actions/upload-artifact@v3
