@@ -3,6 +3,10 @@ name: Build
 on:
   workflow_call:
     inputs:
+      settings_xml:
+        description: 'Maven settings.xml file'
+        type: string
+        required: true
       ecr_repo:
         required: true
         type: string

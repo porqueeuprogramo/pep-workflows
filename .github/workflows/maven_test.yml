@@ -51,3 +51,20 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+      - name: Run tests
+        run: |
+          echo " $SETTINGS_XML " > settings.xml
+          mvn --settings settings.xml test
+      # Upload Test Results as Artifacts
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: Maven-JUnit-test-results
+          path: target/surefire-reports/*.xml
+
+      - name: Archive Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: target
+          path: |
+            target        
