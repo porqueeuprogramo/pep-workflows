@@ -57,8 +57,6 @@ jobs:
             ${{ runner.os }}-maven-          
 
       - name: Run release checks
-        env:
-
         run: |
           mvn -B -Drevision=1.0.0-SNAPSHOT -DdryRun=true -DskipTests release:prepare
           mvn release:clean
