@@ -15,18 +15,24 @@ jobs:
     name: Run unit tests
     uses: porqueeuprogramo/pep-workflows/.github/workflows/maven_test.yml@main
     secrets: inherit
+    with:
+      settings_xml: ${{inputs.settings_xml}}
     
   Package:
     name: Package JARs
     needs: Tests
     uses: porqueeuprogramo/pep-workflows/.github/workflows/maven_package.yml@main
     secrets: inherit
+    with:
+      settings_xml: ${{inputs.settings_xml}}
 
   PreDeployCheck:
     name: Pre-deploy check
     needs: [ Package ]
     uses: porqueeuprogramo/pep-workflows/.github/workflows/maven_pre_deploy_check.yml@main
     secrets: inherit
+    with:
+      settings_xml: ${{inputs.settings_xml}}
 
   PushToEcr:
     name: Push Image to ECR
