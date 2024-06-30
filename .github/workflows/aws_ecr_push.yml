@@ -4,6 +4,9 @@ on:
 
   workflow_call:
     inputs:
+      settings_xml:
+        required: true
+        type: string
       ecr_repo:
         required: true
         type: string  
