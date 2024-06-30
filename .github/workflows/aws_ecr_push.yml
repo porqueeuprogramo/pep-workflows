@@ -4,9 +4,6 @@ on:
 
   workflow_call:
     inputs:
-      settings_xml:
-        required: true
-        type: string
       ecr_repo:
         required: true
         type: string  
@@ -17,8 +14,6 @@ on:
 jobs:
   PushToEcr:
     runs-on: cawe-linux-x64-general-medium
-    env:
-      SETTINGS_XML: ${{inputs.settings_xml}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
