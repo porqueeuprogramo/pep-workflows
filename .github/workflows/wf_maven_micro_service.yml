@@ -32,7 +32,7 @@ jobs:
 
   PreDeployCheck:
     name: Pre-deploy check
-    needs: [ Package ]
+#    needs: [ Package ]
     uses: porqueeuprogramo/pep-workflows/.github/workflows/maven_pre_deploy_check.yml@main
     secrets: inherit
     with:
