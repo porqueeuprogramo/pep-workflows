@@ -16,7 +16,7 @@ on:
 
 jobs:
   PushToEcr:
-    runs-on: cawe-linux-x64-general-medium
+    runs-on: ubuntu-latest
     env:
       SETTINGS_XML: ${{inputs.settings_xml}}
     steps:
