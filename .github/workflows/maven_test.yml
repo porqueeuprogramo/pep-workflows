@@ -3,6 +3,10 @@ name: Unit Tests
 on:
 
   workflow_call:
+    inputs:
+      settings_xml:
+        required: true
+        type: string
 
 jobs:
   Tests:
