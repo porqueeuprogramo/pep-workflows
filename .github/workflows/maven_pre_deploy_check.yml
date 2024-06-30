@@ -29,8 +29,17 @@ jobs:
           sudo apt-get install -y maven
           mvn -version
 
+      # Prepare Integration Tests (H2 DB)
+      - name: Create H2 database directory
+        run: mkdir -p $HOME/h2
+
+      - name: Set environment variable for H2 database path
+        run: echo "H2_DATABASE=$HOME" >> $GITHUB_ENV
+
       # Run Maven build
       - name: Build with Maven
+        env:
+          H2_DATABASE: ${{ env.H2_DATABASE }}
         run: mvn clean install
 
       - name: Download compiled classes
@@ -49,9 +58,8 @@ jobs:
 
       - name: Run release checks
         env:
-          SETTINGS_XML: ${{ inputs.SETTINGS_XML }}
+
         run: |
-          echo " $SETTINGS_XML " > settings.xml
-          mvn --settings settings.xml -B -Drevision=1.0.0-SNAPSHOT -DdryRun=true -DskipTests release:prepare
-          mvn --settings settings.xml release:clean
+          mvn -B -Drevision=1.0.0-SNAPSHOT -DdryRun=true -DskipTests release:prepare
+          mvn release:clean
           
