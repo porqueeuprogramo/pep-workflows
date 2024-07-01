@@ -58,6 +58,19 @@ jobs:
 
       - name: Run release checks
         run: |
+          echo "<settings>
+                  <profiles>
+                    <profile>
+                      <id>scm-profile</id>
+                      <properties>
+                        <scm.username>${{ secrets.SCM_USERNAME }}</scm.username>
+                      </properties>
+                    </profile>
+                  </profiles>
+                  <activeProfiles>
+                    <activeProfile>scm-profile</activeProfile>
+                  </activeProfiles>
+                </settings>" > $HOME/.m2/settings.xml
           mvn -B -Drevision=1.0.0-SNAPSHOT -DdryRun=true -DskipTests release:prepare
           mvn release:clean
           
