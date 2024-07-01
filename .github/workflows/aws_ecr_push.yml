@@ -55,7 +55,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PEP }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PEP }}
-          AWS_REGION: ${{inputs.ecr_repo}}
+          AWS_REGION: ${{inputs.aws_region}}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_PROFILE: ${{ secrets.AWS_PROFILE }}
         run: |
@@ -68,7 +68,7 @@ jobs:
 
       - name: Log in to Amazon ECR
         env:
-          AWS_REGION: ${{inputs.ecr_repo}}
+          AWS_REGION: ${{inputs.aws_region}}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_PROFILE: ${{ secrets.AWS_PROFILE }}
         run: |
@@ -76,7 +76,7 @@ jobs:
 
       - name: Set environment variables for Maven
         env:
-          AWS_REGION: ${{inputs.ecr_repo}}
+          AWS_REGION: ${{inputs.aws_region}}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
         run: |
           echo "ECR_REGISTRY=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com" >> $GITHUB_ENV
@@ -85,7 +85,6 @@ jobs:
 
       - name: Build and deploy with Maven
         env:
-          AWS_REGION: eu-west-2
           ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{inputs.ecr_repo}}.amazonaws.com
           ECR_REPOSITORY: ${{inputs.ecr_repo}}
           IMAGE_TAG: latest
