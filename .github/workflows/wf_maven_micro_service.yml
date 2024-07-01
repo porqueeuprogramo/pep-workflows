@@ -40,7 +40,7 @@ jobs:
 
   PushToEcr:
     name: Push Image to ECR
-    needs: PreDeployCheck
+    needs: [ PreDeployCheck ]
     uses: porqueeuprogramo/pep-workflows/.github/workflows/aws_ecr_push.yml@main
     secrets: inherit
     with:
