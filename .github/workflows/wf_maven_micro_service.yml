@@ -31,5 +31,4 @@ jobs:
     uses: porqueeuprogramo/pep-workflows/.github/workflows/aws_ecr_push.yml@main
     secrets: inherit
     with:
-      aws_region: eu-west-2
       ecr_repo: ${{inputs.ecr_repo}}
