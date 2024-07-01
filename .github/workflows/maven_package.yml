@@ -3,10 +3,6 @@ name: Package
 on:
 
   workflow_call:
-    inputs:
-      settings_xml:
-        required: true
-        type: string
 
 jobs:
   Package:

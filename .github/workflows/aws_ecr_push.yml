@@ -4,15 +4,9 @@ on:
 
   workflow_call:
     inputs:
-      settings_xml:
-        required: true
-        type: string
       ecr_repo:
         required: true
-        type: string  
-      aws_region:
-        required: true
-        type: string              
+        type: string
 
 jobs:
   PushToEcr:
@@ -80,13 +74,13 @@ jobs:
       - name: Set environment variables for Maven
         run: |
           echo "ECR_REGISTRY=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com" >> $GITHUB_ENV
-          echo "ECR_REPOSITORY=pep-restaurant-ms-manager" >> $GITHUB_ENV
+          echo "ECR_REPOSITORY=${{inputs.ecr_repo}}" >> $GITHUB_ENV
           echo "IMAGE_TAG=latest" >> $GITHUB_ENV
 
       - name: Build and deploy with Maven
         env:
           ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
-          ECR_REPOSITORY: pep-restaurant-ms-manager
+          ECR_REPOSITORY: ${{inputs.ecr_repo}}
           IMAGE_TAG: latest
         run: |
           mvn install -Pprod -Djib.httpTimeout=1800000 -Dcheckstyle.skip=true -DskipTests -Decr-service-repository=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG

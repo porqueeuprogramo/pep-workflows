@@ -3,10 +3,6 @@ name: Pre-Deploy Check
 on:
 
   workflow_call:
-    inputs:
-      settings_xml:
-        required: true
-        type: string
    
 jobs:   
   PreDeployCheck:
