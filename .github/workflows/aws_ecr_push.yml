@@ -72,6 +72,9 @@ jobs:
           aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
       - name: Set environment variables for Maven
+        env:
+          AWS_REGION: eu-west-2
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
         run: |
           echo "ECR_REGISTRY=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com" >> $GITHUB_ENV
           echo "ECR_REPOSITORY=${{inputs.ecr_repo}}" >> $GITHUB_ENV
@@ -79,8 +82,9 @@ jobs:
 
       - name: Build and deploy with Maven
         env:
+          AWS_REGION: eu-west-2
           ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
           ECR_REPOSITORY: ${{inputs.ecr_repo}}
           IMAGE_TAG: latest
         run: |
-          mvn install -Pprod -Djib.httpTimeout=1800000 -Dcheckstyle.skip=true -DskipTests -Djib.to.image=905418115951.dkr.ecr.eu-west-2.amazonaws.com/pep-restaurant-ms-manager:latest
+          mvn install -Pprod -Djib.httpTimeout=1800000 -Dcheckstyle.skip=true -DskipTests -Djib.to.image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
