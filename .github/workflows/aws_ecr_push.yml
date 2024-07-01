@@ -69,7 +69,7 @@ jobs:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_PROFILE: ${{ secrets.AWS_PROFILE }}
         run: |
-          aws ecr get-login-password --region $AWS_REGION | docker login --username porqueeuprogramo --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
       - name: Set environment variables for Maven
         run: |
