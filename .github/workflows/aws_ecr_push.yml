@@ -89,4 +89,4 @@ jobs:
           ECR_REPOSITORY: ${{inputs.ecr_repo}}
           IMAGE_TAG: latest
         run: |
-          mvn install -Pprod -Djib.httpTimeout=1800000 -Dcheckstyle.skip=true -DskipTests -Djib.to.image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          mvn install -Pprod -Djib.httpTimeout=1800000 -Dcheckstyle.skip=true -DskipTests -Djib.to.image=905418115951.dkr.ecr.eu-west-2.amazonaws.com/pep-restaurant-ms-manager:latest
