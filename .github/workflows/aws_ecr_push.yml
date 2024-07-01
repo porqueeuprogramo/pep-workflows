@@ -17,8 +17,6 @@ on:
 jobs:
   PushToEcr:
     runs-on: ubuntu-latest
-    env:
-      SETTINGS_XML: ${{inputs.settings_xml}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
