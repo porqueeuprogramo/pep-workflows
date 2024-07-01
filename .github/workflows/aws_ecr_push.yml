@@ -54,13 +54,27 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Add profile credentials to ~/.aws/credentials
+      - name: Configure AWS credentials
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PEP }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PEP }}
+          AWS_REGION: eu-west-2
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_PROFILE: ${{ secrets.AWS_PROFILE }}
+        run: |
+          mkdir -p ~/.aws
+          echo "[${{ secrets.AWS_PROFILE }}]" > ~/.aws/credentials
+          echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID_PEP }}" >> ~/.aws/credentials
+          echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY_PEP }}" >> ~/.aws/credentials
+          echo "[profile ${{ secrets.AWS_PROFILE }}]" > ~/.aws/config
+          echo "region=$AWS_REGION" >> ~/.aws/config
+
+      - name: Log in to Amazon ECR
         env:
           AWS_REGION: eu-west-2
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_PROFILE: ${{ secrets.AWS_PROFILE }}
         run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID_PEP }} --profile ${{ secrets.AWS_PROFILE }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY_PEP }} --profile ${{ secrets.AWS_PROFILE }}
           aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
       - name: Push to ECR
