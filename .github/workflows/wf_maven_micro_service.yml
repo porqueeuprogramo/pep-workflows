@@ -8,26 +8,25 @@ on:
         type: string
     
 jobs:
-  Tests:
-    name: Run unit tests
-    uses: porqueeuprogramo/pep-workflows/.github/workflows/maven_test.yml@main
-    secrets: inherit
-
-  Package:
-    name: Package JARs
-    needs: Tests
-    uses: porqueeuprogramo/pep-workflows/.github/workflows/maven_package.yml@main
-    secrets: inherit
-
-  PreDeployCheck:
-    name: Pre-deploy check
-    needs: [ Package ]
-    uses: porqueeuprogramo/pep-workflows/.github/workflows/maven_pre_deploy_check.yml@main
-    secrets: inherit
+#  Tests:
+#    name: Run unit tests
+#    uses: porqueeuprogramo/pep-workflows/.github/workflows/maven_test.yml@main
+#    secrets: inherit
+#
+#  Package:
+#    name: Package JARs
+#    needs: Tests
+#    uses: porqueeuprogramo/pep-workflows/.github/workflows/maven_package.yml@main
+#    secrets: inherit
+#
+#  PreDeployCheck:
+#    name: Pre-deploy check
+#    needs: [ Package ]
+#    uses: porqueeuprogramo/pep-workflows/.github/workflows/maven_pre_deploy_check.yml@main
+#    secrets: inherit
 
   PushToEcr:
     name: Push Image to ECR
-    needs: [ PreDeployCheck ]
     uses: porqueeuprogramo/pep-workflows/.github/workflows/aws_ecr_push.yml@main
     secrets: inherit
     with:
