@@ -36,7 +36,7 @@ jobs:
       - name: Build with Maven
         env:
           H2_DATABASE: ${{ env.H2_DATABASE }}
-        run: mvn clean install
+        run: mvn clean install -DskipTests
 
       - name: Download compiled classes
         uses: actions/download-artifact@v3

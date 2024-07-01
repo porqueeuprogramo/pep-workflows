@@ -6,7 +6,9 @@ on:
       ecr_repo:
         required: true
         type: string
-    
+      aws_region:
+        required: true
+        type: string
 jobs:
 #  Tests:
 #    name: Run unit tests
@@ -31,3 +33,4 @@ jobs:
     secrets: inherit
     with:
       ecr_repo: ${{inputs.ecr_repo}}
+      aws_region: ${{inputs.aws_region}}
