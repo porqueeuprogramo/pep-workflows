@@ -40,7 +40,6 @@ jobs:
 
   PushToEcr:
     name: Push Image to ECR
-    if: ${{ (inputs.to_promote) && (inputs.ecr_repo != '') }}
     needs: PreDeployCheck
     uses: porqueeuprogramo/pep-workflows/.github/workflows/aws_ecr_push.yml@main
     secrets: inherit
