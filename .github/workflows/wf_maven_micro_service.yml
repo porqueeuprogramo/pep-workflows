@@ -17,7 +17,7 @@ jobs:
 
   Package:
     name: Package JARs
-    needs: Tests
+    needs: [ Tests ]
     uses: porqueeuprogramo/pep-workflows/.github/workflows/maven_package.yml@main
     secrets: inherit
 
@@ -29,6 +29,7 @@ jobs:
 
   PushToEcr:
     name: Push Image to ECR
+    needs: [ PreDeployCheck ]
     uses: porqueeuprogramo/pep-workflows/.github/workflows/aws_ecr_push.yml@main
     secrets: inherit
     with:
